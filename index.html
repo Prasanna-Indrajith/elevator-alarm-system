@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/js/all.min.js" integrity="sha512-6sSYJqDreZRZGkJ3b+YfdhB3MzmuP9R7X1QZ6g5aIXhRvR1Y/N/P47jmnkENm7YL3oqsmI6AK+V6AD99uWDnIw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <title>Elevator Status Dashboard</title>
+  <style>
+    /* General styling */
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #ffffff;
+        margin: 0;
+        min-height: 100%;
+    }
+
+    h1 {
+        text-align: center;
+        color: #000000;
+        margin-block: 1rem;
+    }
+
+    .container {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-inline: 25px;
+        margin-block: 20px 30px;
+        transition: all 0.25s ease-in-out;
+    }
+    .elevator-card:nth-child(1) {
+      background-color: #e2d2ff;
+    }
+    .elevator-card:nth-child(2) {
+      background-color: #bbe5f4;
+    }
+    .elevator-card:nth-child(3) {
+      background-color: #fccccc;
+    }
+
+    /* Card-like styling for each elevator */
+    .elevator-card {
+        color: #0a0230;
+        border-radius: 40px;
+        width: 300px;
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        transition: all 0.25s ease-in-out;
+        /* transition: height 2s linear 1s; */
+    }
+    
+    @media only screen and (max-width: 600px) {
+      .elevator-card {
+        transition: all 0.25s ease-in-out;
+      }
+      .elevator-card:hover {
+      gap: 15px;
+      }
+    }
+    
+    @media only screen and (min-width: 601px) {
+      body {
+        height: 90lvh;
+        /* background: #ff4c4c; */
+        justify-items: center;
+      }
+      h1 {
+        margin-top: 2rem;
+      }
+      footer {
+        bottom: 0;
+        position: relative;
+      }
+      .container {
+        /* background-color: #28a745; */
+        width: min-content;
+        height: max-content;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        align-items: center;
+        position: relative;
+        top: 50%;
+        /* left: 50%; */
+        transform: translate(0%, -65%);
+      }
+      .elevator-card {
+        height: fit-content;
+        gap: 20px;
+      }
+      .elevator-card:hover {
+        transform: scale(1.01);
+      }
+    }
+
+    .elevator-card span {
+      display: flex;
+      text-align: left;
+      /* gap: 5px; */
+      align-items: center;
+    }
+    .elevator-title {
+        font-size: 1.5rem;
+        /* margin-bottom: 10px; */
+        text-align: center;
+        font-weight: bold;
+    }
+    hr {
+      border-color: rgba(0, 0, 0, 0.29);
+    }
+    .status {
+      padding: 10px 20px;
+      border-radius: 25px;
+      font-size: 1rem;
+      text-align: center;
+    }
+
+    /* Styling for each status */
+    .status-ok {
+        background-color: #28a745;  /* Green for "Running OK" */
+        color: white;
+    }
+
+    .status-connection-problem {
+        background-color: #ffc107;  /* Yellow for "Connection Problem" */
+        color: black;
+    }
+
+    .status-in-danger {
+      background-color: #dc3545;  /* Red for "In Danger" */
+      color: white;
+    }
+
+    .status-no-power {
+      background-color: #6c757d;  /* Gray for "No Power" */
+      color: white;
+    }
+
+    footer {
+      position: fixed;
+      /* bottom: 10px; */
+      padding-block: 10px;
+      font-size: 0.8em;
+      width: 100dvw;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4em;
+      position: absolute;
+    }
+    footer p {
+      margin: 0;
+      padding: 0;
+    }
+
+    #enable {
+      position: absolute;
+      top: 1rem;
+      right: 2rem;
+      transition: transform 0.25s ease-in-out;
+    }
+    #enable:hover {
+      transform: scale(1.05);
+      cursor: pointer;
+    }
+    .fa-bell-granted {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Elevator Status Dashboard</h1>
+  <hr>
+  <div class="container">
+    <!-- Card for Elevator 1 -->
+    <div class="elevator-card">
+      <div class="elevator-title">Elevator 01 | IAT</div>
+      <hr>
+      <div id="elevator1-status" class="status"></div>
+      <div>
+        <p>Last Updated:</p>
+        <div id="elevator1-timestamp" class="timestamp"></div>
+      </div>
+    </div>
+
+    <!-- Card for Elevator 2 -->
+    <div class="elevator-card">
+      <div class="elevator-title">Elevator 02 | ET/AT</div>
+      <hr>
+      <div id="elevator2-status" class="status"></div>
+      <div>
+        <p style="margin: 0;">Last Updated:</p>
+        <div id="elevator2-timestamp" class="timestamp"></div>
+      </div>
+    </div>
+
+    <!-- Card for Elevator 3 -->
+    <div class="elevator-card">
+      <div class="elevator-title">Elevator 03 | ICT</div>
+      <hr>
+      <div id="elevator3-status" class="status"></div>
+      <div>
+        <p>Last Updated:</p>
+      <div id="elevator3-timestamp" class="timestamp"></div>
+      </div>
+    </div>
+  </div>
+  <!-- <button id="enable" onclick="askNotificationPermission()">Enable notifications</button> -->
+  <div id="enable" onclick="askNotificationPermission()">
+    <i class="fa-solid fa-bell"></i>
+  </div>
+
+  <footer>
+    <p>© 2024 Elevator Status Dashboard. All rights reserved.</p><p>Powered by GROUP NO:18.</p>
+  </footer>
+
+  <!-- Firebase Integration -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script src="sw.js"></script>
+
+  <script>
+    function askNotificationPermission() {
+      navigator.serviceWorker.register('sw.js');
+      Notification.requestPermission(function(result) {
+        if (result === 'granted') {
+          navigator.serviceWorker.ready.then(function(registration) {
+            registration.showNotification('Notification Enabled!');
+          });
+        }
+      });
+    }
+      
+    // const notification = new Notification("To do list", { body: "text", icon: "img" });
+    // const n = new Notification("My Great Song");
+
+    // Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyCodSTaQ0djNhBsUDmotWL4lubCMlG3CVw",
+      authDomain: "elevator-alarm-system---fot.firebaseapp.com",
+      databaseURL: "https://elevator-alarm-system---fot-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "elevator-alarm-system---fot",
+      storageBucket: "elevator-alarm-system---fot.appspot.com",
+      messagingSenderId: "398504313505",
+    //   appId: "YOUR_APP_ID"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    // Function to update the status with corresponding CSS class
+    function updateElevatorStatus(elevatorId, status, lastUpdated) {
+      const statusElement = document.getElementById(`${elevatorId}-status`);
+      const timestampElement = document.getElementById(`${elevatorId}-timestamp`);
+      
+      // Clear all previous status classes
+      statusElement.classList.remove('status-ok', 'status-connection-problem', 'status-in-danger', 'status-no-power');
+
+      // Update the text and apply the correct status class
+      if (status === "Running OK") {
+        statusElement.textContent = status;
+        statusElement.classList.add('status-ok');
+      } else if (status === "Connection Problem") {
+        statusElement.textContent = status;
+        statusElement.classList.add('status-connection-problem');
+      } else if (status === "In Danger") {
+        statusElement.textContent = status;
+        statusElement.classList.add('status-in-danger');
+        navigator.serviceWorker.ready.then(function(registration) {
+          registration.showNotification(`Pay your attention! ${elevatorId} is in Danger!`);
+        });
+      } else if (status === "No Power") {
+        statusElement.textContent = status;
+        statusElement.classList.add('status-no-power');
+      }
+
+      // Update the timestamp
+      timestampElement.textContent = `${lastUpdated}`;
+    }
+
+    // Fetch elevator data from Firebase in real-time
+    firebase.database().ref('/elevators').on('value', (snapshot) => {
+      const elevators = snapshot.val();
+      console.table(elevators);
+      
+      // Update the status for each elevator
+      updateElevatorStatus('elevator1', elevators.elevator1.status, elevators.elevator1.lastUpdated);
+      updateElevatorStatus('elevator2', elevators.elevator2.status, elevators.elevator2.lastUpdated);
+      updateElevatorStatus('elevator3', elevators.elevator3.status, elevators.elevator3.lastUpdated);
+    });
+  </script>
+
+</body>
+</html>
